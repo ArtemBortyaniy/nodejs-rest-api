@@ -1,15 +1,23 @@
-// const HttpError = require("../helpers/HttpError");
+// const ctrlWrapeer = (ctrl) => {
+//   const func = async (req, res, next) => {
+//     try {
+//       await ctrl(req, res, next);
+//     } catch (error) {
+//       next(error);
+//     }
+//   };
 
-const ctrlWrapeer = (ctrl) => {
-  const func = async (req, res, next) => {
+//   return func;
+// };
+
+const controllerWrapper = (controller) => {
+  return async (req, res, next) => {
     try {
-      await ctrl(req, res, next);
+      await controller(req, res, next);
     } catch (error) {
       next(error);
     }
   };
-
-  return func;
 };
 
-module.exports = { ctrlWrapeer };
+module.exports = { controllerWrapper };
