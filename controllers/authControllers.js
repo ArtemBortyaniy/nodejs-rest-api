@@ -85,24 +85,6 @@ const updateAvatar = controllerWrapper(async (req, res) => {
   res.status(200).json({ avatarURL });
 });
 
-// const updateAvatar = controllerWrapper(async (req, res) => {
-//   const { _id } = req.user;
-//   const { path: tempUpload, originalname } = req.file;
-//   const filename = `${_id}_${originalname}`;
-//   const resultupload = path.join(avatarDir, filename);
-//   const avatarURL = path.join("avatars", filename);
-
-//   const image = await Jimp.read(tempUpload);
-
-//   image.resize(250, 250);
-
-//   await image.writeAsync(resultupload);
-
-//   await User.findByIdAndUpdate(_id, { avatarURL });
-
-//   res.status(200).json({ avatarURL });
-// });
-
 module.exports = {
   registerUser,
   loginUser,
