@@ -37,9 +37,14 @@ const registerUser = controllerWrapper(async (req, res, next) => {
 const loginUser = controllerWrapper(async (req, res, next) => {
   const { email, password, subscription } = req.body;
   const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new HttpError(401, "Email or password is wrong");
+  }
+
   const comparePassword = await bcrypt.compare(password, user.password);
 
-  if (!user || !comparePassword) {
+  if (!comparePassword) {
     throw new HttpError(401, "Email or password is wrong");
   }
 
