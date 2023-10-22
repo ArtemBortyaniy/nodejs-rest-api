@@ -12,6 +12,10 @@ const addSchema = Joi.object({
   token: Joi.string(),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string().required(),
+});
+
 const schemaUpdateFavorite = Joi.object({
   subscription: Joi.string()
     .valid("starter", "pro", "business")
@@ -22,4 +26,4 @@ const schemaUpdateFavorite = Joi.object({
     .required(),
 });
 
-module.exports = { addSchema, schemaUpdateFavorite };
+module.exports = { addSchema, emailSchema, schemaUpdateFavorite };
