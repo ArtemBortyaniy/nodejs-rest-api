@@ -2,27 +2,26 @@ const nodemailer = require("nodemailer");
 
 require("dotenv").config();
 
-const { META_PASSWORD } = process.env;
+// const { META_PASSWORD } = process.env;
+
+const config = {
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: "artembortianiy@gmail.com",
+    pass: "ptcx mcky nefy qjxl",
+  },
+};
+const transporter = nodemailer.createTransport(config);
 
 const sendEmail = (emailOptions) => {
-  const config = {
-    host: "smtp.meta.ua",
-    port: 465,
-    secure: true,
-    auth: {
-      user: "artembortianiy@meta.ua",
-      pass: META_PASSWORD,
-    },
+  const email = {
+    from: "artembortianiy@meta.com",
+    ...emailOptions,
   };
-  const transporter = nodemailer.createTransport(config);
 
-  transporter
-    .sendMail({
-      from: "artembortianiy@meta.ua",
-      ...emailOptions,
-    })
-    .then((info) => console.log(info))
-    .catch((err) => console.log(err));
+  return transporter.sendMail(email);
 };
 
 module.exports = {
