@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
@@ -48,7 +48,7 @@ const verifyEmail = controllerWrapper(async (req, res, next) => {
   const user = await User.findOne({ verificationCode });
 
   if (!user) {
-    throw new HttpError(401, "User not found");
+    throw new HttpError(404, "Not found");
   }
 
   await User.findByIdAndUpdate(user._id, {
@@ -59,13 +59,14 @@ const verifyEmail = controllerWrapper(async (req, res, next) => {
   res.status(200).json({ message: "Email verified successfully" });
 });
 
-const resendVerifyEmail = async (req, res) => {
+const resendVerifyEmail = controllerWrapper(async (req, res) => {
   const { email } = req.body;
 
   const user = await User.findOne({ email });
   if (!user) {
     throw new HttpError(401, "Email not found");
   }
+
   if (user.verify) {
     throw new HttpError(401, "Email already verified");
   }
@@ -73,13 +74,13 @@ const resendVerifyEmail = async (req, res) => {
   const emailOptions = {
     to: email,
     subject: "Verification letter",
-    html: `<a hrtf='${BASE_URL}/users/verify/${user.verificationCode}'>Click verify email</a>`,
+    html: `<a href='${BASE_URL}/users/verify/${user.verificationCode}'>Click verify email</a>`,
   };
 
   await sendEmail(emailOptions);
 
   res.status(200).json({ message: "Email verify send" });
-};
+});
 
 const loginUser = controllerWrapper(async (req, res, next) => {
   const { email, password, subscription } = req.body;
